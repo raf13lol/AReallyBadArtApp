@@ -85,6 +85,7 @@ class PlayState extends FlxState
 			picture.y += FlxG.mouse.y - lastMousePos.y;
 			lastMousePos.set(FlxG.mouse.x, FlxG.mouse.y);
 		}
-		FlxG.camera.zoom += FlxG.mouse.wheel / (FlxG.keys.pressed.SHIFT ? 2.5 : 10);
+		if (FlxG.mouse.wheel != 0)
+			FlxG.camera.zoom += (FlxG.mouse.wheel / (FlxG.keys.pressed.SHIFT ? 5 : 12.5)) * FlxG.camera.zoom;
 	}
 }
