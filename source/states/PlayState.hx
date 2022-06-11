@@ -65,6 +65,9 @@ class PlayState extends FlxState
 				Std.int(FlxG.mouse.y + (0 - picture.y)),
 				PH.getPixelColor(picture)
 			]);
+			if (localUndoHistory.length > 1)
+				PH.fillGaps(picture, localUndoHistory[localUndoHistory.length - 2][0], localUndoHistory[localUndoHistory.length - 1][0],
+					localUndoHistory[localUndoHistory.length - 2][1], localUndoHistory[localUndoHistory.length - 1][1], 0xff000000);
 			if (FlxG.keys.pressed.E)
 				PH.setPixelColor(0xffffffff, picture);
 			else

@@ -24,8 +24,65 @@ class PictureHandling
 			&& picture.y + picture.height >= mouseY;
 	}
 
+	/**
+		MAJOR THANKS TO https://twitter.com/Geokureli WITH THIS OMG 
+		@param picture the picture also not explaining everything else
+	**/
+	public static function fillGaps(picture:FlxSprite, x1:Int, x2:Int, y1:Int, y2:Int, pixelColor:Int)
+	{
+		if (!_checkForGaps([[x1, y1], [x2, y2]]))
+			return;
+		if (x2 < x1)
+		{
+			// swap start and end so were always going left to right
+			var temp = x2;
+			x2 = x1;
+			x1 = temp;
+			temp = y2;
+			y2 = y1;
+			y1 = temp;
+		}
+		if (x1 == x2) // straight up and down
+		{
+			if (y2 < y1)
+			{
+				// swap start and end so we always go from up to down
+				var y = y2;
+				y2 = y1;
+				y1 = y;
+			}
+			// from top to bottom
+			for (y in y1...y2 + 1)
+			{
+				picture.graphic.bitmap.setPixel32(x1, y, pixelColor);
+			}
+		}
+		else
+		{
+			var dx = x2 - x1;
+			var dy = y2 - y1;
+			// from left to right
+			for (x in x1...x2 + 1)
+			{
+				// use slope formula to calculate y from x
+				var y = Std.int(y1 + dy * (x - x1) / dx);
+				picture.graphic.bitmap.setPixel32(x, y, pixelColor);
+			}
+		}
+	}
 
+	/**
+		checks for gaps for the line thing like to close it
+		@param theWholeArray pass localUndoHistory
+	**/
+	static function _checkForGaps(theWholeArray:Array<Dynamic>)
+	{
+		if (theWholeArray.length < 2)
+			return false;
 
+		return (Math.abs(theWholeArray[theWholeArray.length - 1][0] - theWholeArray[theWholeArray.length - 2][0]) > 1)
+			|| (Math.abs(theWholeArray[theWholeArray.length - 1][1] - theWholeArray[theWholeArray.length - 2][1]) > 1);
+	}
 
 	/**
 		checks both png and jpeg
